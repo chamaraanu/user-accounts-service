@@ -9,11 +9,7 @@ import com.igreendata.user.domain.Accounts;
 
 @Repository
 public interface AccountRepository extends CrudRepository<Accounts, Long> {
-	
-	List<Accounts> findByUserId(int userId);	
-	
-	Accounts findTransactionsByAccountNumber(int accountNumber);
-	
+
 	List<Accounts> findAll();
 
 }

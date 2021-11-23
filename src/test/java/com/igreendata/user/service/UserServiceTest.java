@@ -1,11 +1,12 @@
 package com.igreendata.user.service;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.igreendata.user.exception.AccountException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -39,15 +40,7 @@ public class UserServiceTest {
     public void initialize() {
         MockitoAnnotations.initMocks(this);
     }
-	
-	@Test
-	public void getAllUsersServiceTest() {
-		List<User> users = new ArrayList<User>();
-		users.add(new User());
-		when(userRepository.findAll()).thenReturn(users);
-		assertNotNull(userService.getAllUsers());
-	}
-	
+
 	@Test
 	public void getAccountsByUserTest() {
 		List<Accounts> accounts = new ArrayList<Accounts>();
@@ -57,5 +50,25 @@ public class UserServiceTest {
 		when(userRepository.findUserByUsername(anyString())).thenReturn(user);
 		assertNotNull(userService.getAccountsByUser("abc"));
 	}
+
+	@Test
+	public void getAccountByUserFailTest() {
+		User user = new User();
+		user.setUsername("abc");
+		when(userRepository.findUserByUsername(anyString())).thenReturn(user);
+		AccountException accountException = assertThrows(
+				AccountException.class, () -> userService.getAccountsByUser("abc"));
+		assertTrue(accountException.getMessage().contains("Account Not Found!"));
+	}
+
+	@Test
+	public void getAllUsersServiceTest() {
+		List<User> users = new ArrayList<User>();
+		users.add(new User());
+		when(userRepository.findAll()).thenReturn(users);
+		assertNotNull(userService.getAllUsers());
+	}
+	
+
 
 }

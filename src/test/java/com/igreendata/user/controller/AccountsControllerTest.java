@@ -52,7 +52,7 @@ public class AccountsControllerTest {
 		userAccounts.add(new UserAccounts());
 		when(userService.getAccountsByUser(anyString())).thenReturn(userAccounts);
 		
-		MvcResult result = mvc.perform(get("/accounts/useraccounts?username=abc"))
+		MvcResult result = mvc.perform(get("/accounts/user?username=abc"))
 				.andReturn();
 		assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
 	}

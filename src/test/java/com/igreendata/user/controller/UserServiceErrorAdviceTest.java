@@ -19,7 +19,7 @@ public class UserServiceErrorAdviceTest {
 	
 	@Test
 	void handleRunTimeException_RuntimeException() {
-		ResponseEntity<GeneralResponse<GeneralError>> response = userServiceErrorAdvice.handleGeneralError(new RuntimeException());
+		ResponseEntity<GeneralError> response = userServiceErrorAdvice.handleGeneralError(new RuntimeException());
 		assertNotNull(response);
 	}
 	

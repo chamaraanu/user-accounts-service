@@ -1,5 +1,7 @@
 package com.igreendata.user.controller;
 
+import com.igreendata.user.exception.AccountException;
+import com.igreendata.user.exception.TransactionsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,13 +12,22 @@ import com.igreendata.user.response.GeneralResponse;
 
 @ControllerAdvice
 public class UserServiceErrorAdvice {
+
+	@ExceptionHandler(AccountException.class)
+	public ResponseEntity<GeneralError> handleAccountException(AccountException exception) {
+		GeneralError response = new GeneralError(-99, exception.getMessage());
+		return new ResponseEntity<GeneralError>(response, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(TransactionsException.class)
+	public ResponseEntity<GeneralError> handleTransactionsException(TransactionsException exception) {
+		GeneralError response = new GeneralError(-99, exception.getMessage());
+		return new ResponseEntity<GeneralError>(response, HttpStatus.BAD_REQUEST);
+	}
 	
 	@ExceptionHandler(RuntimeException.class)
-	public ResponseEntity<GeneralResponse<GeneralError>> handleGeneralError(RuntimeException exception) {
-		GeneralError generalError = new GeneralError(-99, "Error occurred!");
-		GeneralResponse<GeneralError> response = new GeneralResponse<GeneralError>();
-		response.setData(generalError);
-		
-		return new ResponseEntity<GeneralResponse<GeneralError>>(response, HttpStatus.BAD_REQUEST);
+	public ResponseEntity<GeneralError> handleGeneralError(RuntimeException exception) {
+		GeneralError response = new GeneralError(-99, "Error occurred!");
+		return new ResponseEntity<GeneralError>(response, HttpStatus.BAD_REQUEST);
 	}
 }

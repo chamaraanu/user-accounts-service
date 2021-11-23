@@ -3,6 +3,7 @@ package com.igreendata.user.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.igreendata.user.exception.AccountException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -28,10 +29,16 @@ public class UserService {
 	@Cacheable(value = "useraccounts")
 	public List<UserAccounts> getAccountsByUser(String username) {
 		log.info("getAccountsByUser: fetching accounts by the user...");
-		return userRepository.findUserByUsername(username).getAccounts()
-				.stream()
-				.map(accounts -> modelMapper.map(accounts, UserAccounts.class))
-				.collect(Collectors.toList());
+
+		try {
+			return userRepository.findUserByUsername(username).getAccounts()
+					.stream()
+					.map(accounts -> modelMapper.map(accounts, UserAccounts.class))
+					.collect(Collectors.toList());
+		} catch (Exception e) {
+			throw new AccountException("Account Not Found!", e.getCause());
+		}
+
 	}
 	
 	@Cacheable(value = "users")
