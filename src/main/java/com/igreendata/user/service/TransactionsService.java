@@ -18,6 +18,8 @@ import com.igreendata.user.repository.TransactionRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.transaction.Transactional;
+
 @Service
 @Slf4j
 public class TransactionsService {
@@ -30,8 +32,8 @@ public class TransactionsService {
 	
 	@Autowired
 	ModelMapper modelMapper;
-	
-	@Cacheable(value = "accounttransactions")
+
+	@Transactional
 	public List<AccountTransactions> getTransactionsByAccountNumber(String username, int accountNumber, int page, int size) {
 		log.info("getTransactionsByAccountNumber: fetching transactions by the account");
 
